@@ -4,4 +4,4 @@ This app can easily calculate the tip, taking into account the number of people 
 
 ![overview](overview.png)
 
-![Alt Text](https://github.com/kebwlmbhee/Tip_Calculator/blob/main/overview.gif)
+<img src="https://github.com/kebwlmbhee/Tip_Calculator/blob/main/overview.gif" width = 300 height = 600>
