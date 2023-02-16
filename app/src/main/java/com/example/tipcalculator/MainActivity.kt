@@ -55,13 +55,13 @@ class MainActivity : AppCompatActivity() {
         tvDecimalPlace1 = findViewById(R.id.tvDecimalPlace1)
         tvDecimalPlace2 = findViewById(R.id.tvDecimalPlace2)
 
-        val tvDecimalPlaceArray: Array<TextView> = arrayOf(tvDecimalPlace0, tvDecimalPlace1, tvDecimalPlace2)
+        val tvDecimalPlaceArray: Array<TextView> =
+            arrayOf(tvDecimalPlace0, tvDecimalPlace1, tvDecimalPlace2)
 
         // initialize tip percent
         seekBarTip.progress = INITIAL_TIP_PERCENT
         tvTipPercentAmount.text = "$INITIAL_TIP_PERCENT%"
         updateTipDescription(INITIAL_TIP_PERCENT)
-//        tvTipPercentAmount.text = INITIAL_TIP_PERCENT.toString().plus("%")
 
         // initialize decimal place
         seekBarDecimalPlace.progress = INITIAL_DECIMAL_PLACE
@@ -72,11 +72,11 @@ class MainActivity : AppCompatActivity() {
         updatePeopleAmount(INITIAL_PEOPLE)
 
 
-        seekBarTip.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+        seekBarTip.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 Log.i(TAG, "Tip Percent: onProgressChanged $progress")
+
                 tvTipPercentAmount.text = "$progress%"
-//                tvTipPercentAmount.text = progress.toString().plus("%")
                 computeTipAndTotal()
                 updateTipDescription(progress)
             }
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        seekBarPeople.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+        seekBarPeople.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 Log.i(TAG, "People: onProgressChanged $progress")
 
@@ -102,13 +102,11 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        seekBarDecimalPlace.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+        seekBarDecimalPlace.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 Log.i(TAG, "Decimal Place: onProgressChanged $progress")
-                val decimalPlaceChosen = tvDecimalPlaceArray[progress]
 
                 dynamicFeedbackForChangeDecimalPlace(progress, tvDecimalPlaceArray)
-                decimalPlaceChosen.setTypeface(null, Typeface.BOLD)
                 computeTipAndTotal()
             }
 
@@ -118,7 +116,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        etBaseAmount.addTextChangedListener(object: TextWatcher {
+        etBaseAmount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -131,25 +129,36 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun dynamicFeedbackForChangeDecimalPlace(decimalPlace: Int, tvDecimalPlaceArray: Array<TextView>) {
-        for(i in 0 .. 2){
-            if(i == decimalPlace) {
-                tvDecimalPlaceArray[i].typeface = Typeface.create(tvDecimalPlaceArray[i].typeface, Typeface.BOLD)
-                val color = tvDecimalPlaceArray[i].currentTextColor
-                TextViewCompat.setTextAppearance(tvDecimalPlaceArray[i], android.R.style.TextAppearance_Medium)
+    private fun dynamicFeedbackForChangeDecimalPlace(
+        decimalPlace: Int,
+        tvDecimalPlaceArray: Array<TextView>
+    ) {
+        for (i in 0..2) {
+            val color = tvDecimalPlaceArray[i].currentTextColor
+
+            if (i == decimalPlace) {
+                tvDecimalPlaceArray[i].typeface =
+                    Typeface.create(tvDecimalPlaceArray[i].typeface, Typeface.BOLD)
+                TextViewCompat.setTextAppearance(
+                    tvDecimalPlaceArray[i],
+                    android.R.style.TextAppearance_Medium
+                )
                 tvDecimalPlaceArray[i].setTextColor(color)
+            } else {
+                tvDecimalPlaceArray[i].typeface =
+                    Typeface.create(tvDecimalPlaceArray[i].typeface, Typeface.NORMAL)
+                TextViewCompat.setTextAppearance(
+                    tvDecimalPlaceArray[i],
+                    android.R.style.TextAppearance_Small
+                )
             }
-            else{
-                tvDecimalPlaceArray[i].typeface = Typeface.create(tvDecimalPlaceArray[i].typeface, Typeface.NORMAL)
-                val color = tvDecimalPlaceArray[i].currentTextColor
-                TextViewCompat.setTextAppearance(tvDecimalPlaceArray[i], android.R.style.TextAppearance_Small)
-                tvDecimalPlaceArray[i].setTextColor(color)
-            }
+
+            tvDecimalPlaceArray[i].setTextColor(color)
         }
     }
 
     private fun checkBaseAmountIsEmpty(): Boolean {
-        if(etBaseAmount.text.isEmpty()) {
+        if (etBaseAmount.text.isEmpty()) {
             tvTipAmount.text = ""
             tvTotalAmount.text = ""
             tvAverageAmount.text = ""
@@ -163,11 +172,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateTipDescription(tipPercent: Int) {
-        val tipDescription = when(tipPercent) {
+        val tipDescription = when (tipPercent) {
             in 0..9 -> "Poor\uD83D\uDE22"
             in 10..14 -> "Acceptable\uD83E\uDD7A"
             in 15..19 -> "Good\uD83D\uDE42"
-            in 20 .. 24 -> "Great\uD83D\uDE09"
+            in 20..24 -> "Great\uD83D\uDE09"
             else -> "Amazing\uD83D\uDE18"
         }
         tvTipDescription.text = tipDescription
@@ -182,7 +191,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun confirmDecimalPlace(): String {
-        val res = when(seekBarDecimalPlace.progress) {
+        val res = when (seekBarDecimalPlace.progress) {
             0 -> "%.0f"
             1 -> "%.1f"
             2 -> "%.2f"
@@ -192,7 +201,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun computeTipAndTotal() {
-        if(checkBaseAmountIsEmpty())
+        if (checkBaseAmountIsEmpty())
             return
 
         // Get the value of the base, tip percent and people
